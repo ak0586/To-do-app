@@ -1,3 +1,4 @@
+//notes_model.dart
 class Note {
   String id;
   String subtitle;

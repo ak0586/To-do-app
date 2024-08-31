@@ -1,3 +1,4 @@
+//edit_screen.dart
 import 'package:flutter/material.dart';
 import 'package:todo_application_with_firebase/const/colors.dart';
 import 'package:todo_application_with_firebase/data/firestor.dart';
@@ -26,9 +27,19 @@ class _Edit_ScreenState extends State<Edit_Screen> {
     subtitle = TextEditingController(text: widget._note.subtitle);
   }
 
+  @override
+  void dispose() {
+    title?.dispose();
+    subtitle?.dispose();
+    _focusNode1.dispose();
+    _focusNode2.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
+      
       backgroundColor: backgroundColors,
       body: SafeArea(
         child: Column(
@@ -71,7 +82,7 @@ class _Edit_ScreenState extends State<Edit_Screen> {
           onPressed: () {
             Navigator.pop(context);
           },
-          child: const  Text('Cancel'),
+          child: const Text('Cancel'),
         ),
       ],
     );
@@ -101,10 +112,10 @@ class _Edit_ScreenState extends State<Edit_Screen> {
                   ),
                 ),
                 width: 140,
-                margin: EdgeInsets.all(8),
+                margin: const EdgeInsets.all(8),
                 child: Column(
                   children: [
-                    Image.asset('images/${index}.png'),
+                    Image.asset('images/$index.png'),
                   ],
                 ),
               ),
@@ -126,14 +137,14 @@ class _Edit_ScreenState extends State<Edit_Screen> {
         child: TextField(
           controller: title,
           focusNode: _focusNode1,
-          style: TextStyle(fontSize: 18, color: Colors.black),
+          style:const  TextStyle(fontSize: 18, color: Colors.black),
           decoration: InputDecoration(
               contentPadding:
-                  EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                  const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
               hintText: 'title',
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
-                borderSide: BorderSide(
+                borderSide: const BorderSide(
                   color: Color(0xffc5c5c5),
                   width: 2.0,
                 ),
@@ -162,13 +173,13 @@ class _Edit_ScreenState extends State<Edit_Screen> {
           maxLines: 3,
           controller: subtitle,
           focusNode: _focusNode2,
-          style: TextStyle(fontSize: 18, color: Colors.black),
+          style: const TextStyle(fontSize: 18, color: Colors.black),
           decoration: InputDecoration(
-            contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+            contentPadding:const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
             hintText: 'subtitle',
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
-              borderSide: BorderSide(
+              borderSide: const BorderSide(
                 color: Color(0xffc5c5c5),
                 width: 2.0,
               ),

@@ -1,3 +1,4 @@
+//stream_note.dart
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:todo_application_with_firebase/widgets/task_widgets.dart';
@@ -13,8 +14,11 @@ class Stream_note extends StatelessWidget {
     return StreamBuilder<QuerySnapshot>(
         stream: Firestore_Datasource().stream(done),
         builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return const CircularProgressIndicator();
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return CircularProgressIndicator();
+          }
+          if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+            return Center(child: Text("No tasks found"));
           }
           final noteslist = Firestore_Datasource().getNotes(snapshot);
           return ListView.builder(

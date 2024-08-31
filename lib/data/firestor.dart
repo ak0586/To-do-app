@@ -1,3 +1,4 @@
+//firestor.dart
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +18,7 @@ class Firestore_Datasource {
       return true;
     } catch (e) {
       print(e);
-      return true;
+      return false;
     }
   }
 
@@ -41,7 +42,7 @@ class Firestore_Datasource {
       return true;
     } catch (e) {
       print(e);
-      return true;
+      return false;
     }
   }
 
@@ -85,14 +86,14 @@ class Firestore_Datasource {
       return true;
     } catch (e) {
       print(e);
-      return true;
+      return false;
     }
   }
 
   Future<bool> Update_Note(
       String uuid, int image, String title, String subtitle) async {
     try {
-      DateTime data = new DateTime.now();
+      DateTime data =  DateTime.now();
       await _firestore
           .collection('users')
           .doc(_auth.currentUser!.uid)
@@ -107,7 +108,7 @@ class Firestore_Datasource {
       return true;
     } catch (e) {
       print(e);
-      return true;
+      return false;
     }
   }
 
@@ -122,7 +123,7 @@ class Firestore_Datasource {
       return true;
     } catch (e) {
       print(e);
-      return true;
+      return false;
     }
   }
 }

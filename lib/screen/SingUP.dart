@@ -1,6 +1,8 @@
+//SingUP.dart
 import 'package:flutter/material.dart';
 import 'package:todo_application_with_firebase/const/colors.dart';
 import 'package:todo_application_with_firebase/data/auth_data.dart';
+import 'package:todo_application_with_firebase/screen/home.dart';
 
 class SignUp_Screen extends StatefulWidget {
   final VoidCallback show;
@@ -17,21 +19,17 @@ class _SignUp_ScreenState extends State<SignUp_Screen> {
 
   final email = TextEditingController();
   final password = TextEditingController();
-  final PasswordConfirm = TextEditingController();
+  final passwordConfirm = TextEditingController();
 
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    _focusNode1.addListener(() {
-      setState(() {});
-    });
-    _focusNode2.addListener(() {
-      setState(() {});
-    });
-    _focusNode3.addListener(() {
-      setState(() {});
-    });
+  void dispose() {
+    email.dispose();
+    password.dispose();
+    passwordConfirm.dispose();
+    _focusNode1.dispose();
+    _focusNode2.dispose();
+    _focusNode3.dispose();
+    super.dispose();
   }
 
   @override
@@ -49,12 +47,11 @@ class _SignUp_ScreenState extends State<SignUp_Screen> {
               const SizedBox(height: 10),
               textfield(password, _focusNode2, 'Password', Icons.password),
               const SizedBox(height: 10),
-              textfield(PasswordConfirm, _focusNode3, 'PasswordConfirm',
-                  Icons.password),
+              textfield(passwordConfirm, _focusNode3, 'Confirm Password', Icons.password),
               const SizedBox(height: 8),
               account(),
               const SizedBox(height: 20),
-              SignUP_bottom(),
+              SignUpButton(),
             ],
           ),
         ),
@@ -69,7 +66,7 @@ class _SignUp_ScreenState extends State<SignUp_Screen> {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           Text(
-            "Don you have an account?",
+            "Already have an account?",
             style: TextStyle(color: Colors.grey[700], fontSize: 14),
           ),
           const SizedBox(width: 5),
@@ -88,13 +85,30 @@ class _SignUp_ScreenState extends State<SignUp_Screen> {
     );
   }
 
-  Widget SignUP_bottom() {
+  Widget SignUpButton() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15),
       child: GestureDetector(
-        onTap: () {
-          AuthenticationRemote()
-              .register(email.text, password.text, PasswordConfirm.text);
+        onTap: () async {
+          if (email.text.isEmpty || password.text.isEmpty || passwordConfirm.text.isEmpty) {
+            ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Please fill all fields')),
+            );
+            return;
+          }
+
+          try {
+            await AuthenticationRemote()
+                .register(email.text, password.text, passwordConfirm.text);
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Signup successful!')),
+            );
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const Home_Screen()));
+          } catch (e) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Signup failed: ${e.toString()}')),
+            );
+          }
         },
         child: Container(
           alignment: Alignment.center,
@@ -158,7 +172,6 @@ class _SignUp_ScreenState extends State<SignUp_Screen> {
   }
 
   Widget image() {
-    
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15),
       child: Container(

@@ -8,7 +8,7 @@ class Home_Screen extends StatefulWidget {
   const Home_Screen({super.key});
 
   @override
-  State<Home_Screen> createState() => _Home_ScreenState();
+  State createState() => _Home_ScreenState();
 }
 
 bool show = true;
@@ -17,17 +17,21 @@ class _Home_ScreenState extends State<Home_Screen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: const Color.fromARGB(255, 200, 220, 213),
+        title: const Text('Tasks'),
+      ),
       backgroundColor: backgroundColors,
       floatingActionButton: Visibility(
         visible: show,
         child: FloatingActionButton(
           onPressed: () {
             Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => Add_creen(),
+              builder: (context) => const Add_screen(),
             ));
           },
           backgroundColor: custom_green,
-          child: Icon(Icons.add, size: 30),
+          child: const Icon(Icons.add, size: 30),
         ),
       ),
       body: SafeArea(
@@ -45,18 +49,31 @@ class _Home_ScreenState extends State<Home_Screen> {
             }
             return true;
           },
-          child: Column(
-            children: [
-              Stream_note(false),
-              Text(
-                'isDone',
-                style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.grey.shade500,
-                    fontWeight: FontWeight.bold),
-              ),
-              Stream_note(true),
-            ],
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Text(
+                  'Tasks, Have to Completed',
+                  style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.grey.shade500,
+                      fontWeight: FontWeight.bold),
+                ),
+                Stream_note(false),
+                const SizedBox(
+                    height: 20,
+                    child:
+                        Text('--------------------------------------------')),
+                Text(
+                  'Tasks Completed',
+                  style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.grey.shade500,
+                      fontWeight: FontWeight.bold),
+                ),
+                Stream_note(true),
+              ],
+            ),
           ),
         ),
       ),

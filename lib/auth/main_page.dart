@@ -1,3 +1,4 @@
+//main_page.dart
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:todo_application_with_firebase/auth/auth_page.dart';
@@ -21,8 +22,12 @@ class Main_Page extends StatelessWidget {
       body: StreamBuilder<User?>(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
-          if (snapshot.hasData) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasData) {
             return const Home_Screen();
+          } else if (snapshot.hasError) {
+            return const Center(child: Text('Something went wrong!'));
           } else {
             return Auth_Page();
           }

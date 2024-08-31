@@ -1,26 +1,38 @@
+//add_note_sscreen.dart
 // import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:todo_application_with_firebase/const/colors.dart';
 import 'package:todo_application_with_firebase/data/firestor.dart';
 
-class Add_creen extends StatefulWidget {
-  const Add_creen({super.key});
+class Add_screen extends StatefulWidget {
+  const Add_screen({super.key});
 
   @override
-  State<Add_creen> createState() => _Add_creenState();
+  State<Add_screen> createState() => _Add_screenState();
 }
 
-class _Add_creenState extends State<Add_creen> {
+class _Add_screenState extends State<Add_screen> {
   final title = TextEditingController();
   final subtitle = TextEditingController();
 
   final FocusNode _focusNode1 = FocusNode();
   final FocusNode _focusNode2 = FocusNode();
   int indexx = 0;
+
+  @override
+  void dispose() {
+    title.dispose();
+    subtitle.dispose();
+    _focusNode1.dispose();
+    _focusNode2.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: backgroundColors,
+      
       body: SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -28,7 +40,7 @@ class _Add_creenState extends State<Add_creen> {
             title_widgets(),
             const SizedBox(height: 20),
             subtite_wedgite(),
-            const  SizedBox(height: 20),
+            const SizedBox(height: 20),
             imagess(),
             const SizedBox(height: 20),
             button()
@@ -47,11 +59,20 @@ class _Add_creenState extends State<Add_creen> {
             foregroundColor: custom_green,
             minimumSize: Size(170, 48),
           ),
-          onPressed: () {
-            Firestore_Datasource().AddNote(subtitle.text, title.text, indexx);
-            Navigator.pop(context);
+          onPressed: () async {
+            bool success = await Firestore_Datasource()
+                .AddNote(subtitle.text, title.text, indexx);
+            if (success) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Task Added suceesfully')));
+              Navigator.pop(context);
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Failed to add task')),
+              );
+            }
           },
-          child: Text('add task'),
+          child: const Text('add task'),
         ),
         ElevatedButton(
           style: ElevatedButton.styleFrom(
@@ -91,7 +112,7 @@ class _Add_creenState extends State<Add_creen> {
                   ),
                 ),
                 width: 140,
-                margin: EdgeInsets.all(8),
+                margin: const EdgeInsets.all(8),
                 child: Column(
                   children: [
                     Image.asset('images/${index}.png'),

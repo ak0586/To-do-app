@@ -14,14 +14,39 @@ class Home_Screen extends StatefulWidget {
 }
 
 bool show = true;
+bool a = true;
 
 class _Home_ScreenState extends State<Home_Screen> {
+  void to() {
+    setState(() {
+      a = !a;
+    });
+  }
+
+  void _logout() async {
+    await FirebaseAuth.instance.signOut();
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+          builder: (context) => LogIN_Screen(to)), // Navigate to login screen
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 200, 220, 213),
-        title: const Text('Tasks'),
+        title: const Text(
+          'Todo App',
+          style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: _logout,
+          ),
+        ],
+        // centerTitle: true,
+        backgroundColor: custom_green,
       ),
       backgroundColor: backgroundColors,
       floatingActionButton: Visibility(
@@ -41,6 +66,22 @@ class _Home_ScreenState extends State<Home_Screen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Always show the "Tasks, Have to be Completed" text with count
+            Container(
+              padding: const EdgeInsets.all(8.0),
+              width: double.infinity,
+              color: const Color.fromARGB(255, 95, 214, 186),
+              child: const Center(
+                child: Text(
+                  'Tasks',
+                  style: TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.blueGrey,
+                  ),
+                  // textAlign: TextAlign.center,
+                ),
+              ),
+            ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: StreamBuilder(

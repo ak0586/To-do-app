@@ -91,30 +91,37 @@ class _LogIN_ScreenState extends State<LogIN_Screen> {
         onTap: () async {
           try {
             await AuthenticationRemote().login(email.text, password.text);
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Login successful!')),
-            );
-            Navigator.pushReplacement(
+            if (mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Login successful!')),
+              );
+              Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => Home_Screen(),
-                ));
+                  builder: (context) => const Home_Screen(),
+                ),
+              );
+            }
           } on FirebaseAuthException catch (e) {
-            switch (e.code) {
-              case 'user-not-found':
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('No user found for that email.')),
-                );
-                break;
-              case 'wrong-password':
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Wrong password provided.')),
-                );
-                break;
-              default:
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('An error occurred: ${e.message}')),
-                );
+            if (mounted) {
+              switch (e.code) {
+                case 'user-not-found':
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                        content: Text('No user found for that email.')),
+                  );
+                  break;
+                case 'wrong-password':
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                        content: Text('Incorrect password, Please try again.')),
+                  );
+                  break;
+                default:
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('An error occurred: ${e.message}')),
+                  );
+              }
             }
           }
         },
@@ -155,7 +162,9 @@ class _LogIN_ScreenState extends State<LogIN_Screen> {
           decoration: InputDecoration(
               prefixIcon: Icon(
                 iconss,
-                color: _focusNode.hasFocus ? custom_green : Color(0xffc5c5c5),
+                color: _focusNode.hasFocus
+                    ? custom_green
+                    : const Color(0xffc5c5c5),
               ),
               contentPadding:
                   const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
